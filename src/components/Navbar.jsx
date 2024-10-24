@@ -32,6 +32,7 @@ export default function Navbar() {
   useEffect(() => {
     if (currentCategory) {
       const categoryMapping = {
+        all : [],
         clothes: ["women's clothing", "men's clothing"],
         electronics: ["electronics"],
         furnitures: [],
@@ -75,7 +76,7 @@ export default function Navbar() {
           <CloudArrowUpIcon className="w-6 h-6 text-gray-800 ml-2 mr-4" />
         </li>
         <li>
-          <Link href="/" className={activeStyle}>
+          <Link href="/" onClick={() => handleCategoryClick("all")} className={activeStyle}>
             All
           </Link>
         </li>
@@ -113,11 +114,12 @@ export default function Navbar() {
             <li className="font-semibold text-lg">
               <Link href="/myOrders">My Orders</Link>
             </li>
-            <li className="font-semibold text-lg">
-              <Link href="/myAccount">My Account</Link>
-            </li>
-
-            <li onClick={handleLogout} className="font-semibold text-lg text-red-500">
+            <li onClick={handleCartClick} className="flex justify-center items-center">
+          <ShoppingBagIcon className="size-6" />
+          <div>{cartProducts.length}</div>
+        </li>
+            
+            <li onClick={handleLogout} className="font-semibold text-lg text-red-500 ml-10">
               <Link href="/login">Logout</Link>
             </li>
           </>
@@ -131,10 +133,7 @@ export default function Navbar() {
             </li>
           </>
         )}
-        <li onClick={handleCartClick} className="flex justify-center items-center">
-          <ShoppingBagIcon className="size-6" />
-          <div>{cartProducts.length}</div>
-        </li>
+        
       </ul>
     </nav>
   );

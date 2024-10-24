@@ -48,6 +48,7 @@ model ShippingInfo {
 model Product {
   id       Int      @id @default(autoincrement())
   title    String
+  quantity Int?
   price    Float
   description String 
   image   String

@@ -22,6 +22,7 @@ const shopSlice = createSlice({
     isProductDetailOpen: false,
     isCheckOutOpen: false,
     productToShow: {},
+    newProductToShow: {},
     currentOrder: {},
     status: 'idle',
     userId: 0,
@@ -55,6 +56,9 @@ const shopSlice = createSlice({
     setProductToShow: (state, action) => {
       state.productToShow = action.payload;
       localStorage.setItem('productToShow', JSON.stringify(action.payload));
+    },
+    setNewProductToShow: (state, action) => {
+      state.productToShow = action.payload;
     },
     addProductToCart: (state, action) => {
       const productInCart = state.cartProducts.find(
@@ -149,6 +153,7 @@ export const {
   openCheckOut,
   closeCheckOut,
   setProductToShow,
+  setNewProductToShow,
   addProductToCart,
   removeProductFromCart,
   updateProductQuantity,

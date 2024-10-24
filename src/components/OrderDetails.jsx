@@ -1,7 +1,20 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNewProductToShow} from '../store/slices/shopSlice';
+import { useRouter } from 'next/navigation';
 
-const OrderDetails = ({ selectedOrder, isProductListOpen, setIsProductListOpen }) => {
+const OrderDetails = ({ selectedOrder, isProductListOpen, setIsProductListOpen, setProductToShow }) => {
   const [isShippingInfoOpen, setIsShippingInfoOpen] = useState(false);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+
+
+  const showProduct = (product) => {
+    dispatch(setNewProductToShow(product));
+    router.push(`/product/${product.id}`);
+
+  };
 
   return (
     selectedOrder && isProductListOpen && (
@@ -15,6 +28,7 @@ const OrderDetails = ({ selectedOrder, isProductListOpen, setIsProductListOpen }
           {selectedOrder.products.map((product) => (
             <li key={product.id} className="flex items-center space-x-4">
               <img
+                onClick={() => showProduct(product)}
                 src={product.image}
                 alt={product.title}
                 className="w-20 h-20 object-cover rounded-lg shadow-md"
@@ -22,6 +36,7 @@ const OrderDetails = ({ selectedOrder, isProductListOpen, setIsProductListOpen }
               <div className="flex-1">
                 <div className="text-gray-900 font-semibold text-lg">{product.title}</div>
                 <div className="text-gray-600">${product.price.toFixed(2)}</div>
+                <div className="text-gray-600">Quantity: {product.quantity}</div>
               </div>
             </li>
           ))}

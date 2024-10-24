@@ -27,50 +27,47 @@ export default function ProductPage() {
   };
 
   useEffect(() => {
-    if (!productToShow) {
+    const storedProduct = localStorage.getItem('productToShow');
+    
+    if (!productToShow && storedProduct) {
+      dispatch(setProductToShow(JSON.parse(storedProduct))); // Restaurar desde localStorage
+    }
+  
+    if (!productToShow && !storedProduct) {
       router.push("/"); // Redirigir si no hay producto seleccionado
     }
-
-    // Obtener comentarios relacionados al producto
-
+  
     if (productToShow) {
       const fetchComments = async () => {
-        console.log(productToShow.id);
         if (!productToShow.id) return;
         const response = await axios.get(
           `/api/comments?productId=${productToShow.id}`
         );
         setComments(response.data);
       };
-
       fetchComments();
     }
-
+  
     // Verificar si el usuario puede comentar
-    console.log(productToShow.id);
-    console.log(userId);
-    if (productToShow.id && userId !== 0) {
-      console.log(productToShow.id);
-      console.log(userId);
+    if (productToShow && userId !== 0) {
       const verifyUserOrder = async () => {
         const response = await axios.get(
           `/api/users/productUser?userId=${userId}&productId=${productToShow.id}`
         );
-        console.log(response.data);
         setCanComment(response.data.canComment);
       };
       verifyUserOrder();
     }
-
+  
     setRelatedProducts(
       items.filter(
         (product) =>
-          product.category === productToShow.category &&
-          product.id !== productToShow.id
+          product.category === productToShow?.category &&
+          product.id !== productToShow?.id
       )
     );
-
   }, [productToShow, userId, router]);
+  
 
   const handleCommentSubmit = async () => {
     if (newComment.trim() === '' || rating === 0) {
@@ -115,8 +112,7 @@ export default function ProductPage() {
 //   );
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
-      {/* Información del producto */}
+<div className="max-w-5xl mx-auto p-4 bg-white mt-10 w-full min-h-screen rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">      {/* Información del producto */}
       <div className="flex flex-col md:flex-row items-start border-b pb-6 mb-6">
         <img
           src={productToShow.image}

@@ -28,6 +28,7 @@ export default async function handler(req, res) {
               price: product.price,
               description: product.description,
               image: product.image,
+              quantity: product.quantity
             })),
           },
         },

@@ -17,6 +17,7 @@
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-rating-stars-component": "^2.2.0",
     "react-redux": "^9.1.2"
   },
   "devDependencies": {

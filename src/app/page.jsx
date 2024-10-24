@@ -22,7 +22,7 @@ export default function Home() {
 
   const itemsToDisplay = filteredItems.length > 0 ? filteredItems : items;
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   // Calculate the products to display based on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
