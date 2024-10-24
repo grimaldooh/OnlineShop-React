@@ -18,7 +18,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="flex items-center mb-4">
+    <div className="flex items-center mb-4 mt-6">
       <input
         type="text"
         value={searchTerm}
@@ -26,12 +26,7 @@ const SearchBar = () => {
         placeholder="Search..."
         className="flex-1 p-2 border border-gray-300 rounded-md"
       />
-      <button
-        onClick={handleSearch}
-        className="ml-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-      >
-        Search
-      </button>
+      
     </div>
   );
 };

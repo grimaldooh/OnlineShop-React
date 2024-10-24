@@ -11,8 +11,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ReduxProvider>
+
         <Navbar />
-        <div className="flex flex-col items-center mt-20">
+        <div className="flex flex-col items-center mt-20 bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen w-full">
               {children}
          </div>
         </ReduxProvider>

@@ -1,8 +1,12 @@
 // src/app/shipping/page.js
 'use client';   
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function Shipping() {
+
+  const userId = localStorage.getItem('userId');
+
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -12,7 +16,11 @@ export default function Shipping() {
   const [cvv, setCvv] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const currentOrder = useSelector((state) => state.shop.currentOrder);
+  console.log(currentOrder);
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Validaciones simples
@@ -31,13 +39,49 @@ export default function Shipping() {
 
     // Aquí puedes manejar la lógica para enviar la información de envío y pago
     console.log('Shipping Info:', { name, address, city, paymentMethod, cardNumber, expirationDate, cvv });
+    console.log('Order Info:', currentOrder);
+
+    try {
+      const response = await fetch('/api/orders/saveOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          currentOrder: currentOrder, // Usar el currentOrder del estado de Redux
+          shippingInfo: {
+            name,
+            address,
+            city,
+          },
+          paymentInfo: {
+            paymentMethod,
+            cardNumber,
+            expirationDate,
+            cvv,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Orden guardada con éxito:', result);
+        setSuccessMessage('¡Compra realizada con éxito! Gracias por su pedido.');
+      } else {
+        throw new Error('Error en la respuesta del servidor');
+      }
+    } catch (error) {
+      console.error('Error al enviar la orden:', error);
+      alert('Hubo un error al procesar tu orden. Por favor intenta de nuevo.');
+    }
     
     // Mostrar mensaje de éxito
     setSuccessMessage('¡Compra realizada con éxito! Gracias por su pedido.');
   };
 
   return (
-    <div className="border border-gray-300 p-6 rounded-lg shadow-lg bg-white">
+    <div className="border border-gray-300 p-6 rounded-lg shadow-lg bg-white mt-8">
       <h2 className="text-2xl font-bold mb-4">Shipping and Payment Information</h2>
       
       {successMessage ? (

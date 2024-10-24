@@ -24,6 +24,7 @@ const shopSlice = createSlice({
     productToShow: {},
     currentOrder: {},
     status: 'idle',
+    userId: 0,
   },
   reducers: {
     
@@ -44,6 +45,7 @@ const shopSlice = createSlice({
       state.productToShow = {};
     },
     openCheckOut: (state) => {
+      console.log('openCheckOut');
       state.isCheckOutOpen = true;
       state.isProductDetailOpen = false;
     },
@@ -52,14 +54,29 @@ const shopSlice = createSlice({
     },
     setProductToShow: (state, action) => {
       state.productToShow = action.payload;
+      localStorage.setItem('productToShow', JSON.stringify(action.payload));
     },
     addProductToCart: (state, action) => {
-      state.cartProducts.push(action.payload);
+      const productInCart = state.cartProducts.find(
+        (product) => product.id === action.payload.id
+      );
+      if (productInCart) {
+        productInCart.quantity += action.payload.quantity;
+      } else {
+        state.cartProducts.push({ ...action.payload, quantity: 1 });
+      }
     },
     removeProductFromCart: (state, action) => {
       state.cartProducts = state.cartProducts.filter(
         (product) => product.id !== action.payload
       );
+    },
+    updateProductQuantity: (state, action) => {
+      const { id, quantity } = action.payload;
+      const productInCart = state.cartProducts.find((product) => product.id === id);
+      if (productInCart) {
+        productInCart.quantity = quantity;
+      }
     },
     clearCart: (state) => {
       state.cartProducts = [];
@@ -72,6 +89,13 @@ const shopSlice = createSlice({
     },
     setSearchItem: (state, action) => {
       state.searchItem = action.payload;
+    },
+    setUserId: (state, action) => {
+      state.userId = action.payload;
+      localStorage.setItem('userId', action.payload);  // Guardar userId en localStorage
+    },
+    clearUserId: (state) => {
+      state.userId = null;  // Limpiar userId (para logout o cierre de sesión)
     },
     completeCheckout: (state, action) => {
       state.allOrders.push(action.payload);
@@ -114,6 +138,8 @@ const shopSlice = createSlice({
 });
 
 export const {
+  setUserId,
+  clearUserId,
   setSearchItem,
   setCurrentCategory,
   setFilteredItems,
@@ -125,6 +151,7 @@ export const {
   setProductToShow,
   addProductToCart,
   removeProductFromCart,
+  updateProductQuantity,
   clearCart,
   setAllOrders,
   setCurrentOrder,

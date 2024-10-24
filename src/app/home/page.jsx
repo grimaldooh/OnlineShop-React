@@ -2,8 +2,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchProducts, setCurrentCategory } from '../../store/slices/shopSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../../store/slices/shopSlice';
 import Card from '../../components/utilidades/Card';
 import ProductDetail from '../../components/utilidades/ProductDetail';
 import SearchBar from '../../components/utilidades/SearchBar';
@@ -18,15 +18,15 @@ export default function Home() {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  const itemsToDisplay = filteredItems.length > 0 ? filteredItems : items;
-
+  // Refresh the page on first load
   
+
+  const itemsToDisplay = filteredItems.length > 0 ? filteredItems : items;
 
   return (
     <div>
-
       <SearchBar />
-      <div className='grid gap-4 grid-cols-4 w-full max-w-screen-xl'>
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full max-w-screen-xl mx-auto p-6 bg-black bg-opacity-30 rounded-lg shadow-lg">        
         {itemsToDisplay.map((product, index) => (
           <Card key={index} data={product} />
         ))}
