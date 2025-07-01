@@ -61,6 +61,7 @@ const shopSlice = createSlice({
       state.productToShow = action.payload;
     },
     addProductToCart: (state, action) => {
+
       const productInCart = state.cartProducts.find(
         (product) => product.id === action.payload.id
       );
@@ -69,11 +70,24 @@ const shopSlice = createSlice({
       } else {
         state.cartProducts.push({ ...action.payload, quantity: 1 });
       }
+      localStorage.setItem('cartProducts', JSON.stringify(state.cartProducts));
+      let cartProducts = JSON.parse(localStorage.getItem('cartProducts'));
+      
+      console.log('addProductToCart', cartProducts);
     },
     removeProductFromCart: (state, action) => {
       state.cartProducts = state.cartProducts.filter(
         (product) => product.id !== action.payload
       );
+      localStorage.setItem('cartProducts', JSON.stringify(state.cartProducts));
+    },
+    recoverCart: (state) => {
+      const cartProducts = JSON.parse(localStorage.getItem('cartProducts'));
+      if (cartProducts) {
+        state.cartProducts = cartProducts;
+        console.log('recoverCart', cartProducts);
+        console.log('recoverCart from shop', state.cartProducts);
+      }
     },
     updateProductQuantity: (state, action) => {
       const { id, quantity } = action.payload;
@@ -96,7 +110,7 @@ const shopSlice = createSlice({
     },
     setUserId: (state, action) => {
       state.userId = action.payload;
-      localStorage.setItem('userId', action.payload);  // Guardar userId en localStorage
+      localStorage.setItem('userId', action.payload);  
     },
     clearUserId: (state) => {
       state.userId = null;  // Limpiar userId (para logout o cierre de sesión)
@@ -161,6 +175,7 @@ export const {
   setAllOrders,
   setCurrentOrder,
   completeCheckout,
+  recoverCart,
 } = shopSlice.actions;
 
 export default shopSlice.reducer;

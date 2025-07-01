@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProducts, setCurrentCategory } from '../store/slices/shopSlice';
+import { fetchProducts, recoverCart, setCurrentCategory } from '../store/slices/shopSlice';
 import Card from '../components/utilidades/Card';
 import ProductDetail from '../components/utilidades/ProductDetail';
 import SearchBar from '../components/utilidades/SearchBar';
@@ -14,10 +14,14 @@ export default function Home() {
   const dispatch = useDispatch();
   const { items, filteredItems, currentCategory, status } = useSelector(state => state.shop);
   console.log(items); 
-
+  const cart =localStorage.getItem('cartProducts');
+  const userId = localStorage.getItem('userId');
+  console.log('userId', userId);
+  console.log('cart', cart);
   // Fetch products when the component mounts
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(recoverCart());
   }, [dispatch]);
 
   const itemsToDisplay = filteredItems.length > 0 ? filteredItems : items;
